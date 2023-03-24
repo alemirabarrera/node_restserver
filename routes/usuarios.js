@@ -1,4 +1,3 @@
-
 const { Router } = require('express');
 const { check } = require('express-validator');
 const {validarCampos} = require('../middelwares/validar-campos');
@@ -41,9 +40,5 @@ router.delete('/:id',[
 ], usuariosDelete );
 
 router.patch('/', usuariosPatch );
-
-
-
-
 
 module.exports = router;
