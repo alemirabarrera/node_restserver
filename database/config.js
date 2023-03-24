@@ -5,9 +5,8 @@ const dbConnection = async ()=>{
         await mongoose.connect(process.env.MONGODB_CNN, {
             useNewUrlParser: true,                       
             useUnifiedTopology: true,
-            useFindAndModify: false,                 
-            useCreateIndex: true              // to handle collection.ensureIndex is deprecated
-
+            //useFindAndModify: false,                 
+            //useCreateIndex: true              // to handle collection.ensureIndex is deprecated
             });
         console.log('base de datos online');
 
