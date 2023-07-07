@@ -9,9 +9,9 @@ const { usuariosGET,
 const { esRoleValido, emailExiste, existeIdMongo } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 
+
 const router = Router();
 
-    router.get('/',  usuariosGET);
 
     router.put('/:id',[        
         check("id","No es un ID valido").isMongoId(),
@@ -36,6 +36,7 @@ const router = Router();
         ,validarCampos
     ], usuariosDelete);
 
-    router.patch('/',  usuariosPatch);
+
+router.patch('/', usuariosPatch );
 
 module.exports = router;

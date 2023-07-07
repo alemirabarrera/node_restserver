@@ -1,5 +1,6 @@
 const {Schema, model} =require("mongoose");
 
+
 const roleSchema = Schema({
     rol: {
         type: String,
@@ -7,5 +8,5 @@ const roleSchema = Schema({
     }
 });
 
-
 module.exports = model("role", roleSchema);
+

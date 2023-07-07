@@ -1,3 +1,4 @@
+
 const { response, request } = require("express");
 const bcryptjs = require("bcryptjs");
 const Usuario = require("../models/usuario");
@@ -61,14 +62,15 @@ const usuariosPut = async(req, res)=> {
         msg: "Actualizado correctamente"
         ,usuario
     })
+
 }
 
-const usuariosPatch =(req, res)=> {
+const usuariosPatch = (req, res = response) => {
     res.json({
-        ok: true,
-        msg: "patch API controller"
-    })
+        msg: 'patch API - usuariosPatch'
+    });
 }
+
 
 const usuariosDelete = async(req, res)=> {
 
@@ -83,9 +85,9 @@ const usuariosDelete = async(req, res)=> {
 
 
 module.exports = {
-    usuariosGET,
+    usuariosGet,
     usuariosPost,
-    usuariosPatch,
     usuariosPut,
-    usuariosDelete
+    usuariosPatch,
+    usuariosDelete,
 }
