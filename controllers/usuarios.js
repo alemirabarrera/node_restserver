@@ -4,7 +4,7 @@ const bcryptjs = require("bcryptjs");
 const Usuario = require("../models/usuario");
 
 
-const usuariosGET = async(req=request, res = response)=> {     
+const usuariosGet = async(req=request, res = response)=> {     
     
     const {limite = 5, desde = 0, nombre =""} = req.query;
     let query; 
