@@ -7,8 +7,8 @@ class Server {
     constructor() {
         this.app  = express();
         this.port = process.env.PORT;
-        this.usuariosPath = '/api/usuarios';
-        //conectar a DB
+        this.usuariosPath ='/usuarios';
+        // Conectar a base de datos.
         this.conectarDB();
 
         // Middlewares
@@ -17,15 +17,13 @@ class Server {
         // Rutas de mi aplicación
         this.routes();
     }
-
     async conectarDB(){
-        await dbConnection();
+        await dbConnection()
     }
 
-    middlewares() {
-
-        // CORS
-        this.app.use( cors() );
+    middlewares(){        
+        //CORS
+        this.app.use(cors());
 
         // Lectura y parseo del body
         this.app.use( express.json() );

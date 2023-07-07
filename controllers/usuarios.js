@@ -1,56 +1,68 @@
-const { response, request } = require('express');
-const  Usuario  = require("../models/usuario");
-const bcryptjs = require('bcryptjs');
 
-const usuariosGet = async(req = request, res = response) => {
+const { response, request } = require("express");
+const bcryptjs = require("bcryptjs");
+const Usuario = require("../models/usuario");
 
-    // const { q='select * from users', nombre = 'No name', apikey, page = 1, limit } = req.query;
-    const {limite = 5, desde=0 } = req.query;
-    const query = {estado: true};
 
-    const [total, usuarios] = await Promise.all(
-        [Usuario.countDocuments(query),
-        Usuario.find(query)
-        .skip(Number(desde))
+const usuariosGET = async(req=request, res = response)=> {     
+    
+    const {limite = 5, desde = 0, nombre =""} = req.query;
+    let query; 
+    if(nombre) query={nombre}; else query={estado: true}
+
+    const [total,  usuarios] = await Promise.all([
+        Usuario.countDocuments(query)
+        , Usuario.find(query)
+        .skip(Number( desde))
         .limit(Number(limite))
-        ])
-
-    res.json({ 
-        total,   
-        usuarios    
-    });
+    ])
+        
+    res.json({
+        total,
+        result_query:{count: usuarios.length, usuarios}                
+    })    
 }
 
-const usuariosPost = async (req, res = response) => {    
-    const  {nombre, correo, password, rol}  = req.body;
-    const  usuario = new Usuario({nombre, correo, password, rol});   
-    
-    //Emcriptar la contra
+
+
+const usuariosPost =async (req, res)=> {    
+    const {nombre, correo, password, rol} = req.body;
+    //const {google ,...resto} = req.body;    
+    const usuario = new Usuario({nombre, correo, password, rol});  
+
+    //Encriptar la contraseña
     const salt = bcryptjs.genSaltSync();
     usuario.password = bcryptjs.hashSync(password, salt);
 
-
-    //Guardar en DB
+    //guardar en DB.
     await usuario.save();
-    
-    res.json({        
+
+    res.status(201).json({
+        ok: true,
+        msg: "post API controller",
         usuario
-    });
+    })
 }
 
-const usuariosPut = async (req, res = response) => {
-    const { id } = req.params;
-    const { _id, password, google,correo, ...rest}=req.body;
-    //TO DO VALIDAR CONTRA DB
+const usuariosPut = async(req, res)=> {    
+    
+
+    const {id} = req.params;
+    const {_id, password, google, correo,...resto_data} = req.body;
+    //TODO validar contra bd
     if(password){
-        //Emcriptar la contra
+        //Encriptar la contraseña
         const salt = bcryptjs.genSaltSync();
-        rest.password = bcryptjs.hashSync(password, salt);
+        resto_data.password = bcryptjs.hashSync(password, salt);
+    }    
+    const usuario = await Usuario.findByIdAndUpdate(id, resto_data,{new:true})
+    
+    
+    res.status(200).json({        
+        msg: "Actualizado correctamente"
+        ,usuario
+    })
 
-    }
-    const usuario = await Usuario.findByIdAndUpdate(id, rest);
-
-    res.json(usuario);
 }
 
 const usuariosPatch = (req, res = response) => {
@@ -59,18 +71,17 @@ const usuariosPatch = (req, res = response) => {
     });
 }
 
-const usuariosDelete = async (req, res = response) => {
+
+const usuariosDelete = async(req, res)=> {
+
     const {id} = req.params;
-    //fisicamente lo borramos de la DB.
-    //const usuario = await Usuario.findByIdAndDelete(id);
+    //borrado fisico
+    //const usuario =await Usuario.findByIdAndDelete(id); Se pierde la integridad referencial.
 
-    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    const usuario = await Usuario.findByIdAndUpdate(id,{estado:false}, {new:true});
 
-
-    res.json(usuario);
+    res.json(usuario)
 }
-
-
 
 
 module.exports = {
