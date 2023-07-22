@@ -7,7 +7,12 @@ const { usuariosGet,
         usuariosPut,
         usuariosPatch } = require("../controllers/usuarios");
 const { esRoleValido, emailExiste, existeIdMongo } = require("../helpers/db-validators");
-const { validarCampos } = require("../middelwares/validar-campos");
+
+//const { validarCampos } = require("../middelwares/validar-campos");
+//const { validarJWT } = require("../middelwares/validar-jwt");
+//const { adminRole, tieneRole} = require("../middelwares/validar-roles");
+
+const {validarCampos, validarJWT, adminRole, tieneRole} = require("../middelwares");
 
 
 const router = Router();
@@ -31,10 +36,13 @@ const router = Router();
         validarCampos
     ], usuariosPost);
 
-    router.delete('/:id',[
+    router.delete('/:id',[        
+        validarJWT,
+        //adminRole,
+        tieneRole('VENTAS_ROL','ADMIN_ROL','USER_ROL'),
         check("id","No es un ID valido").isMongoId(),
         check("id").custom(existeIdMongo)
-        ,validarCampos
+        ,validarCampos        
     ], usuariosDelete);
 
 
