@@ -15,20 +15,17 @@ const {correo, password } = req.body;
                 "msg": "Usuario/ password no son correctos - Correo"
             })
         }
-        
-        //si el usuario esta activo
-        if(!usuario.estado){
-            return res.status(400).json({
-                "msg": "El usuario ya no se encuentra activo"
-            })
-        }
-
         //verificar la contra 
-        
         const validPoassword = bcryptjs.compareSync( password, usuario.password);                
         if(!validPoassword){
             return res.status(400).json({
                 "msg": "Usuario/ password no son correctos - Password"
+            })
+        }        
+        //si el usuario esta activo
+        if(!usuario.estado){
+            return res.status(400).json({
+                "msg": "El usuario ya no se encuentra activo"
             })
         }
 
