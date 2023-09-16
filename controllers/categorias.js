@@ -14,12 +14,12 @@ const obtenerCategorias = async (req, res = response) =>{
     let categoria, total=0;
         
     if(id) {
-        categoria= await Categoria.findById(id).populate("usuario")
+        categoria= await Categoria.findById(id).populate("usuario","correo")
         if(categoria)total = 1;
     } else{
         [total,  categoria] = await Promise.all([
             Categoria.countDocuments(query)
-            ,Categoria.find(query).populate("usuario")
+            ,Categoria.find(query).populate("usuario","correo")
             .skip(Number( desde))
             .limit(Number(limite))
         ])
@@ -59,7 +59,34 @@ const crearCategoria = async (req, res = response) =>{
 }
 
 
+const actualizarCategoria = async (req, res = response) =>{
+    const {id} = req.params;        
+    const {_id,usuario, estado, ...rest_data} = req.body;
+    rest_data.nombre =rest_data.nombre.toUpperCase();
+    rest_data.usuario = req.usuario._id;        
+    const categoria = await Categoria.findByIdAndUpdate(id, rest_data ,{new:true})
+        
+    res.status(200).json({        
+        msg: "Categoria Actualizada correctamente"
+        ,categoria
+    })
+}
+
+const eliminarCategoria = async (req, res = response) =>{
+    const {id} = req.params;        
+    //borrado fisicos
+    //const categoria =await Categoria.findByIdAndDelete(id); Se pierde la integridad referencial.
+    const categoria = await Categoria.findByIdAndUpdate(id, {estado:false, usuario: req.usuario._id}, {new:true});
+
+    res.status(200).json({        
+        msg: "Categoria Eliminada",
+        categoria
+    })
+}
+
 module.exports = {
     crearCategoria, 
-    obtenerCategorias
+    obtenerCategorias, 
+    actualizarCategoria,
+    eliminarCategoria
 }

@@ -55,10 +55,13 @@ const googleSingIn = async(req, res= response)=>{
         const {nombre, img, correo}= await googleVerify(id_token);                
         let usuario = await Usuario.findOne({correo});
         if(!usuario){
+            const salt = bcryptjs.genSaltSync();
+            let password = bcryptjs.hashSync('pasw123', salt);
+
             const data ={
                 nombre,
                 correo,
-                password: 'pasw123',
+                password,
                 img,
                 rol: 'USER_ROL',
                 google: true
