@@ -22,7 +22,7 @@ router.get('/:id',[
 router.post('/', [
     validarJWT,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    check('estado', 'El estado es obligatorio').not().isEmpty(),
+    //check('estado', 'El estado es obligatorio').not().isEmpty(), //no es obligatorio
     check("categoria","la categoria no es un ID valido").isMongoId(),
     check('categoria').custom( existeCategoriaPorId),        
     validarCampos,
