@@ -1,7 +1,6 @@
 const { Router} = require("express");
 const { check } = require("express-validator"); 
 const { validarCampos } = require("../middelwares/validar-campos"); 
-
 const { validarJWT, adminRole } = require("../middelwares"); 
 const { crearCategoria,
         obtenerCategorias,
