@@ -33,10 +33,11 @@
             //google tocken : id token            
             const body_data = { "id_token": response.credential}
             console.log(window.location.hostname.includes("localhost"));
+            console.log(window.location.hostname);
 
             var url = (window.location.hostname.includes("localhost"))
-                      ? 'https://noderestserver-production-7173.up.railway.app/auth/google'
-                      : 'http://localhost:8080/auth/google'
+                      ?'http://localhost:8080/auth/google'
+                      :'https://noderestserver-production-7173.up.railway.app/auth/google'                      
             console.log(url);
             fetch(url, {
                 method: "POST",
