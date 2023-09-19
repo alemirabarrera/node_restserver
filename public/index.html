@@ -32,7 +32,13 @@
         function handleCredentialResponse(response) {
             //google tocken : id token            
             const body_data = { "id_token": response.credential}
-            fetch("http://localhost:8080/auth/google", {
+            console.log(window.location.hostname.includes("localhost"));
+
+            var url = (window.location.hostname.includes("localhost"))
+                      ? 'https://noderestserver-production-7173.up.railway.app/auth/google'
+                      : 'http://localhost:8080/auth/google'
+            console.log(url);
+            fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",                    
