@@ -36,10 +36,7 @@ const buscarCategoria = async(termino = "", res = response) =>{
         })
     }
     const regex = new RegExp(termino, "i");
-    const categoria = await Categoria.find({
-        $or: [{nombre: regex}],
-        $and: [{estado: true}]
-    })
+    const categoria = await Categoria.find({nombre: regex},{estado: true})
     res.status(200).json({ results: categoria});
 }
 const buscarProductos = async(termino ="", res = response) => {
@@ -64,7 +61,7 @@ const buscarProductos = async(termino ="", res = response) => {
     const productos = await Producto.find({         
         $or: [{nombre: regex },{descripcion: regex}],
         $and: [{estado: true}, {disponible:true}]
-    });    
+    }).populate("categoria","nombre");    
     res.status(200).json({
         results: productos
     });
