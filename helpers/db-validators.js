@@ -33,6 +33,18 @@ const exiteProductoPorId = async (id ="") =>{
     if(!existeProducto){
         throw new Error(`El id: ${ id } del producto no esta registrado.`);   
     }
+} 
+
+/**
+ * validar colecciones permitidas
+ */
+const coleccionesPrmitidas = (coleccion, colecciones=[])=>{
+    const incluida = colecciones.includes(coleccion);
+    if(!incluida){
+        throw new Error(`La coleccion ${coleccion} no es permitida, perimitidas: ${colecciones}`);
+    }
+
+    return true;    
 }
 
 module.exports = {
@@ -40,5 +52,6 @@ module.exports = {
     emailExiste,
     existeIdUsuario,
     existeCategoriaPorId,
-    exiteProductoPorId
+    exiteProductoPorId,
+    coleccionesPrmitidas
 }
